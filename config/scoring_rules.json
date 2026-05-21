@@ -1,0 +1,25 @@
+{
+  "max_score": 100,
+  "min_score": 0,
+  "criteria": [
+    {"id": "professional_email", "label": "Email professionnel", "points": 10, "description": "Domaine différent des webmails personnels"},
+    {"id": "phone_available", "label": "Téléphone disponible", "points": 10},
+    {"id": "decision_maker_role", "label": "Poste décisionnaire", "points": 20, "keywords": ["directeur", "directrice", "ceo", "fondateur", "fondatrice", "drh", "rh", "head", "responsable", "manager", "vp", "président", "présidente", "owner", "cfo", "cto", "coo"]},
+    {"id": "organization_identified", "label": "Entreprise ou école identifiable", "points": 15},
+    {"id": "positive_response", "label": "Réponse positive", "points": 20},
+    {"id": "meeting_booked", "label": "RDV pris", "points": 25},
+    {"id": "newsletter_opened", "label": "Ouverture newsletter", "points": 5},
+    {"id": "link_clicked", "label": "Clic sur lien", "points": 10},
+    {"id": "no_response_3_followups", "label": "Aucune réponse après 3 relances", "points": -20}
+  ],
+  "classification": {
+    "cold": {"min": 0, "max": 30, "label": "Lead froid"},
+    "warm": {"min": 31, "max": 60, "label": "Lead tiède"},
+    "hot": {"min": 61, "max": 80, "label": "Lead chaud"},
+    "priority": {"min": 81, "max": 100, "label": "Priorité commerciale"}
+  },
+  "personal_email_domains": [
+    "gmail.com", "yahoo.com", "hotmail.com", "outlook.com",
+    "icloud.com", "proton.me", "live.com", "aol.com", "mail.com"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "segments": [
+    "Apprenant",
+    "Parent",
+    "Professeur",
+    "Formateur",
+    "École",
+    "Université",
+    "Entreprise",
+    "Incubateur",
+    "ONG",
+    "Institution publique",
+    "Investisseur",
+    "Partenaire stratégique",
+    "Média",
+    "Non classé"
+  ],
+  "newsletter_mapping": {
+    "Professeur": "professeurs_formateurs",
+    "Formateur": "professeurs_formateurs",
+    "Entreprise": "entreprises",
+    "École": "ecoles_universites",
+    "Université": "ecoles_universites",
+    "Incubateur": "incubateurs_partenaires",
+    "Partenaire stratégique": "incubateurs_partenaires",
+    "Parent": "parents_apprenants",
+    "Apprenant": "parents_apprenants",
+    "Investisseur": "investisseurs_institutions",
+    "Institution publique": "investisseurs_institutions"
+  },
+  "classification_keywords": {
+    "Professeur": ["professeur", "enseignant", "teacher", "prof", "pédagogie"],
+    "Formateur": ["formateur", "trainer", "coach", "formation"],
+    "École": ["école", "school", "collège", "lycée", "primaire"],
+    "Université": ["université", "university", "faculté", "campus", "master", "doctorat"],
+    "Entreprise": ["entreprise", "company", "sarl", "sas", "sa ", "ltd", "gmbh", "corp"],
+    "Incubateur": ["incubateur", "incubator", "accelerator", "accélérateur"],
+    "Investisseur": ["investisseur", "investor", "vc", "venture", "capital", "fonds"],
+    "ONG": ["ong", "ngo", "association", "fondation"],
+    "Institution publique": ["ministère", "gouvernement", "public", "état", "municipal"],
+    "Partenaire stratégique": ["partenaire", "partner", "partnership"],
+    "Média": ["média", "media", "journal", "presse", "rédaction"],
+    "Parent": ["parent", "famille", "maman", "papa"]
+  }
+}

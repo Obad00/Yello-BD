@@ -1,0 +1,62 @@
+{
+  "name": "Yello — Sync CRM vers Brevo",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "days", "daysInterval": 15}]}},
+      "id": "schedule_15d",
+      "name": "Tous les 15 jours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "application": "={{$env.AIRTABLE_BASE_ID}}",
+        "table": "Contacts",
+        "filterByFormula": "AND({Consentement newsletter}=TRUE(), {Score du lead}>=31)"
+      },
+      "id": "airtable_list",
+      "name": "Contacts éligibles",
+      "type": "n8n-nodes-base.airtable",
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "id": "split",
+      "name": "Par lot",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.brevo.com/v3/contacts",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "email": "={{$json.fields.Email}}",
+          "attributes": {
+            "PRENOM": "={{$json.fields['Prénom']}}",
+            "NOM": "={{$json.fields.Nom}}",
+            "SEGMENT": "={{$json.fields.Segment}}"
+          },
+          "listIds": ["={{$json.brevo_list_id}}"]
+        }
+      },
+      "id": "brevo_upsert",
+      "name": "Ajouter à Brevo",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Tous les 15 jours": {"main": [[{"node": "Contacts éligibles", "type": "main", "index": 0}]]},
+    "Contacts éligibles": {"main": [[{"node": "Par lot", "type": "main", "index": 0}]]},
+    "Par lot": {"main": [[{"node": "Ajouter à Brevo", "type": "main", "index": 0}]]}
+  },
+  "meta": {"description": "Synchronise les contacts CRM consentants vers les listes Brevo par segment."}
+}

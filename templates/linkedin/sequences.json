@@ -1,0 +1,58 @@
+{
+  "name": "Séquence prospection LinkedIn Yello",
+  "description": "Séquence semi-automatisée J0 → J+15",
+  "steps": [
+    {
+      "day": 0,
+      "id": "connexion",
+      "action": "Demande de connexion",
+      "template": "Bonjour {{prenom}}, je développe Yello, une solution IA pour l'éducation. Votre rôle chez {{organisation}} m'intéresse — puis-je vous ajouter ?",
+      "max_chars": 300
+    },
+    {
+      "day": 2,
+      "id": "presentation",
+      "action": "Message de présentation",
+      "template": "Merci pour la connexion {{prenom}} ! Yello aide {{segment_article}} à intégrer l'IA de façon pédagogique. Seriez-vous ouvert(e) à un échange de 15 min ?",
+      "max_chars": 500
+    },
+    {
+      "day": 5,
+      "id": "cas_usage",
+      "action": "Partage cas d'usage",
+      "template": "Bonjour {{prenom}}, une {{segment}} partenaire a augmenté l'engagement des apprenants grâce à Yello. Je peux vous envoyer le cas concret si cela vous intéresse.",
+      "max_chars": 500
+    },
+    {
+      "day": 10,
+      "id": "rdv",
+      "action": "Proposition RDV",
+      "template": "Bonjour {{prenom}}, avez-vous 20 min cette semaine pour une démo ? Voici mon lien Calendly : {{calendly_url}}",
+      "max_chars": 400,
+      "requires": ["calendly_url"]
+    },
+    {
+      "day": 15,
+      "id": "relance",
+      "action": "Relance douce",
+      "template": "Bonjour {{prenom}}, je me permets une relance — toujours partant(e) pour découvrir comment Yello peut accompagner {{organisation}} ?",
+      "max_chars": 350
+    }
+  ],
+  "target_roles": [
+    "Directeur d'école",
+    "Responsable formation",
+    "DRH",
+    "Learning & Development",
+    "Program Manager",
+    "Fondateur centre de formation"
+  ],
+  "search_keywords": [
+    "directeur école",
+    "responsable formation",
+    "DRH",
+    "learning development",
+    "incubateur éducation",
+    "professeur université"
+  ]
+}

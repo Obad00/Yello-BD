@@ -1,0 +1,15 @@
+# Yello — dépendances optionnelles
+# Le cœur Gmail fonctionne sans installation (stdlib Python 3.10+).
+# Installez uniquement ce dont vous avez besoin :
+
+# CRM Airtable
+pyairtable>=2.3.0
+
+# Classification IA (optionnel)
+openai>=1.30.0
+
+# Variables d'environnement
+python-dotenv>=1.0.0
+
+# HTTP (webhooks n8n, Brevo)
+requests>=2.31.0

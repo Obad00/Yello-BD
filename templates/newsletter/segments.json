@@ -1,0 +1,48 @@
+{
+  "frequency_days": 15,
+  "tool": "Brevo",
+  "segments": [
+    {
+      "id": "professeurs_formateurs",
+      "name": "Professeurs / Formateurs",
+      "brevo_list_env": "BREVO_LIST_PROFESSEURS",
+      "content_types": ["article_ia_education", "cas_usage", "demo_produit", "nouvelle_fonctionnalite"]
+    },
+    {
+      "id": "entreprises",
+      "name": "Entreprises",
+      "brevo_list_env": "BREVO_LIST_ENTREPRISES",
+      "content_types": ["cas_usage", "temoignage_client", "offre_speciale", "webinaire"]
+    },
+    {
+      "id": "ecoles_universites",
+      "name": "Écoles / Universités",
+      "content_types": ["cas_usage", "article_ia_education", "webinaire", "demo_produit"]
+    },
+    {
+      "id": "incubateurs_partenaires",
+      "name": "Incubateurs / Partenaires",
+      "content_types": ["partenariat", "cas_usage", "webinaire"]
+    },
+    {
+      "id": "parents_apprenants",
+      "name": "Parents / Apprenants",
+      "content_types": ["article_ia_education", "nouvelle_fonctionnalite", "temoignage_client"]
+    },
+    {
+      "id": "investisseurs_institutions",
+      "name": "Investisseurs / Institutions",
+      "content_types": ["cas_usage", "article_ia_education"]
+    }
+  ],
+  "subject_templates": {
+    "article_ia_education": "L'IA transforme l'éducation — ce que {{organisation}} peut en tirer",
+    "cas_usage": "Comment une {{segment}} a réussi avec Yello",
+    "temoignage_client": "Témoignage : {{client_name}} et Yello",
+    "demo_produit": "Découvrez la démo Yello en 5 minutes",
+    "webinaire": "Invitation : Webinaire Yello le {{date}}",
+    "nouvelle_fonctionnalite": "Nouveau sur Yello : {{feature_name}}",
+    "offre_speciale": "Offre spéciale Yello — jusqu'au {{date}}"
+  },
+  "tracking_kpis": ["open_rate", "click_rate", "unsubscribe_rate", "replies", "hot_leads"]
+}

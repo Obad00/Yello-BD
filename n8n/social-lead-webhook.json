@@ -1,0 +1,78 @@
+{
+  "name": "Yello — Lead réseau social → CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "yello-social-lead",
+        "responseMode": "onReceived"
+      },
+      "id": "webhook",
+      "name": "Webhook ManyChat/GHL",
+      "type": "n8n-nodes-base.webhook",
+      "position": [240, 300],
+      "webhookId": "yello-social-lead"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b = $input.first().json.body || $input.first().json;\nreturn [{\n  json: {\n    nom: b.nom || b.name || '',\n    prenom: b.prenom || b.first_name || '',\n    email: b.email || '',\n    telephone: b.phone || b.telephone || '',\n    source: b.channel || 'Instagram',\n    segment: b.segment || 'Non classé',\n    score: b.segment === 'Entreprise' ? 35 : 20,\n    commentaires: b.message || ''\n  }\n}];"
+      },
+      "id": "normalize",
+      "name": "Normaliser lead",
+      "type": "n8n-nodes-base.code",
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "application": "={{$env.AIRTABLE_BASE_ID}}",
+        "table": "Contacts",
+        "fields": {
+          "Nom": "={{$json.nom}}",
+          "Prénom": "={{$json.prenom}}",
+          "Email": "={{$json.email}}",
+          "Téléphone": "={{$json.telephone}}",
+          "Source": "={{$json.source}}",
+          "Segment": "={{$json.segment}}",
+          "Score du lead": "={{$json.score}}",
+          "Statut commercial": "Nouveau lead",
+          "Commentaires": "={{$json.commentaires}}"
+        }
+      },
+      "id": "airtable_create",
+      "name": "Créer contact CRM",
+      "type": "n8n-nodes-base.airtable",
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{"value1": "={{$json.score}}", "operation": "largerEqual", "value2": 61}]
+        }
+      },
+      "id": "hot_lead",
+      "name": "Lead chaud ?",
+      "type": "n8n-nodes-base.if",
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "subject": "🔥 Nouveau lead chaud — {{$json.fields.Nom}}",
+        "text": "Source: {{$json.fields.Source}}\nSegment: {{$json.fields.Segment}}\nScore: {{$json.fields['Score du lead']}}"
+      },
+      "id": "email_alert",
+      "name": "Alerte équipe",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [1120, 200]
+    }
+  ],
+  "connections": {
+    "Webhook ManyChat/GHL": {"main": [[{"node": "Normaliser lead", "type": "main", "index": 0}]]},
+    "Normaliser lead": {"main": [[{"node": "Créer contact CRM", "type": "main", "index": 0}]]},
+    "Créer contact CRM": {"main": [[{"node": "Lead chaud ?", "type": "main", "index": 0}]]},
+    "Lead chaud ?": {"main": [[{"node": "Alerte équipe", "type": "main", "index": 0}], []]}
+  },
+  "meta": {
+    "description": "Connectez ManyChat ou GoHighLevel à ce webhook. Valide le critère CDC : message Instagram → contact CRM."
+  }
+}

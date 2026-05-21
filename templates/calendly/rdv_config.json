@@ -1,0 +1,19 @@
+{
+  "tool": "Calendly",
+  "event_types": [
+    {"id": "demo_20min", "name": "Démo Yello 20 min", "duration_minutes": 20},
+    {"id": "partenariat_30min", "name": "Échange partenariat", "duration_minutes": 30}
+  ],
+  "automation": {
+    "send_link_when_score_min": 61,
+    "confirmation_email": true,
+    "reminder_24h": true,
+    "reminder_1h": true,
+    "google_calendar_sync": true
+  },
+  "event_description_template": "Prospect: {{nom}} {{prenom}}\nOrganisation: {{organisation}}\nSegment: {{segment}}\nBesoin: {{besoin}}\nSource: {{source}}\nScore: {{score}}\nCRM: {{crm_link}}",
+  "variables": {
+    "calendly_base_url": "https://calendly.com/votre-compte",
+    "demo_path": "/demo-20min"
+  }
+}

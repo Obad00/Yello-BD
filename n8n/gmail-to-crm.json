@@ -1,0 +1,53 @@
+{
+  "name": "Yello — Gmail vers CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {"interval": [{"field": "hours", "hoursInterval": 6}]}
+      },
+      "id": "schedule",
+      "name": "Toutes les 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /chemin/vers/projet && python scripts/sync_gmail_crm.py --limite 30"
+      },
+      "id": "exec_sync",
+      "name": "Sync Gmail Python",
+      "type": "n8n-nodes-base.executeCommand",
+      "position": [460, 300],
+      "notes": "Adapter le chemin vers votre serveur"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{"value1": "={{$json.created}}", "operation": "larger", "value2": 0}]
+        }
+      },
+      "id": "if_new",
+      "name": "Nouveaux contacts ?",
+      "type": "n8n-nodes-base.if",
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.N8N_WEBHOOK_NEW_LEAD}}",
+        "method": "POST",
+        "body": "={{$json}}"
+      },
+      "id": "notify",
+      "name": "Notifier équipe",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [900, 200]
+    }
+  ],
+  "connections": {
+    "Toutes les 6h": {"main": [[{"node": "Sync Gmail Python", "type": "main", "index": 0}]]},
+    "Sync Gmail Python": {"main": [[{"node": "Nouveaux contacts ?", "type": "main", "index": 0}]]},
+    "Nouveaux contacts ?": {"main": [[{"node": "Notifier équipe", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "meta": {"description": "Importez ce workflow dans n8n. Alternative : webhook → script Python."}
+}

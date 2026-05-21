@@ -1,0 +1,45 @@
+{
+  "description": "Réponses automatiques réseaux sociaux — Module 1",
+  "channels": ["instagram", "facebook", "whatsapp", "linkedin"],
+  "qualification_flow": {
+    "welcome": "Bonjour ! Merci pour votre message. Yello accompagne l'éducation avec l'IA. Pour mieux vous orienter, vous êtes :",
+    "options": [
+      {"id": "apprenant", "label": "Apprenant / Étudiant", "segment": "Apprenant"},
+      {"id": "parent", "label": "Parent", "segment": "Parent"},
+      {"id": "professeur", "label": "Professeur / Formateur", "segment": "Professeur"},
+      {"id": "entreprise", "label": "Entreprise / École", "segment": "Entreprise"}
+    ]
+  },
+  "replies_by_segment": {
+    "Apprenant": {
+      "message": "Super ! Découvrez Yello ici : {{landing_url}} — Des questions ? On est là.",
+      "links": ["landing_url"]
+    },
+    "Parent": {
+      "message": "Bonjour ! Yello aide les familles à suivre l'apprentissage. Brochure : {{brochure_url}}",
+      "links": ["brochure_url"]
+    },
+    "Professeur": {
+      "message": "Merci ! Voici une démo adaptée aux enseignants : {{demo_url}} — RDV possible : {{calendly_url}}",
+      "links": ["demo_url", "calendly_url"]
+    },
+    "Entreprise": {
+      "message": "Parfait ! Notre équipe peut vous présenter Yello pour {{organisation}}. Réservez un créneau : {{calendly_url}}",
+      "links": ["calendly_url"]
+    }
+  },
+  "hot_lead_trigger": {
+    "keywords": ["démo", "demo", "prix", "tarif", "rdv", "rendez-vous", "devis", "partenariat"],
+    "action": "send_calendly_and_notify_human"
+  },
+  "escalation": {
+    "message": "Je transmets votre demande à un membre de l'équipe Yello. Réponse sous 24h.",
+    "triggers": ["réclamation", "bug", "remboursement", "urgent", "plainte"]
+  },
+  "variables": {
+    "landing_url": "https://yello.example/landing",
+    "brochure_url": "https://yello.example/brochure",
+    "demo_url": "https://yello.example/demo",
+    "calendly_url": "https://calendly.com/yello/demo"
+  }
+}

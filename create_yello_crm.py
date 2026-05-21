@@ -29,8 +29,32 @@ import sys
 # ─────────────────────────────────────────────
 import os
 
+
+def load_dotenv(filepath=None):
+    """Charge les variables d'environnement depuis un fichier .env si présent."""
+    if filepath is None:
+        filepath = os.path.join(os.path.dirname(__file__), ".env")
+    if not os.path.isfile(filepath):
+        return
+
+    with open(filepath, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip()
+            if (value.startswith('"') and value.endswith('"')) or (value.startswith("'") and value.endswith("'")):
+                value = value[1:-1]
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+
+load_dotenv()
+
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
-WORKSPACE_ID   = "wspsFEvySvnpcMFrA"   # ex: wspABCD1234EFGH5678
+WORKSPACE_ID = os.getenv("WORKSPACE_ID")   # ex: wspABCD1234EFGH5678
 # ─────────────────────────────────────────────
 
 BASE_URL = "https://api.airtable.com/v0/meta"
@@ -39,6 +63,20 @@ HEADERS = {
     "Authorization": f"Bearer {AIRTABLE_TOKEN}",
     "Content-Type": "application/json",
 }
+
+def print_api_error(resp, context):
+    """Affiche un message d'erreur Airtable plus détaillé."""
+    print(f"❌ Erreur {context} : {resp.status_code}")
+    try:
+        data = resp.json()
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        if isinstance(data, dict) and data.get("error"):
+            err = data["error"]
+            if isinstance(err, dict) and err.get("type") == "MODEL_ID_NOT_FOUND":
+                print("   → Vérifie ton WORKSPACE_ID et ton token Airtable.")
+                print("   → Le workspace ID doit commencer par 'wsp'.")
+    except ValueError:
+        print(resp.text)
 
 
 # ── Couleurs des statuts commerciaux ──────────────────────────────────────────
@@ -192,13 +230,21 @@ FIELDS = [
 
 def validate_config():
     """Vérifie que le token et le workspace sont configurés."""
+    if not AIRTABLE_TOKEN:
+        print("❌ Erreur : AIRTABLE_TOKEN non défini. Vérifie ton fichier .env ou la variable d'environnement.")
+        print("   → https://airtable.com/create/tokens")
+        sys.exit(1)
     if AIRTABLE_TOKEN.startswith("patXXX"):
         print("❌ Erreur : configure ton AIRTABLE_TOKEN avant de lancer le script.")
         print("   → https://airtable.com/create/tokens")
         sys.exit(1)
-    if WORKSPACE_ID.startswith("wspXXX"):
-        print("❌ Erreur : configure ton WORKSPACE_ID avant de lancer le script.")
-        print("   → Visible dans l'URL de ton workspace sur airtable.com")
+    if not WORKSPACE_ID:
+        print("❌ Erreur : WORKSPACE_ID non défini. Ajoute WORKSPACE_ID à ton fichier .env ou à ta variable d'environnement.")
+        print("   → Exemple : WORKSPACE_ID=wspABCD1234EFGH5678")
+        sys.exit(1)
+    if not WORKSPACE_ID.startswith("wsp"):
+        print("❌ Erreur : WORKSPACE_ID invalide. Il doit commencer par 'wsp'.")
+        print("   → Vérifie le workspace ID dans l'URL de ton workspace Airtable.")
         sys.exit(1)
 
 
@@ -229,8 +275,7 @@ def create_base():
     )
 
     if resp.status_code != 200:
-        print(f"❌ Erreur création base : {resp.status_code}")
-        print(resp.text)
+        print_api_error(resp, "création de la base")
         sys.exit(1)
 
     data = resp.json()
@@ -298,7 +343,7 @@ def add_sample_record(base_id, table_id):
         }
     }
 
-    resp = requests.post(url, headers=HEADERS, json={"records": [record]})
+    resp = reqWORKSPACE_ID.post(url, headers=HEADERS, json={"records": [record]})
 
     if resp.status_code == 200:
         record_id = resp.json()["records"][0]["id"]

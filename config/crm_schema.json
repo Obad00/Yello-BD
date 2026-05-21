@@ -1,0 +1,38 @@
+{
+  "table_name": "Contacts",
+  "description": "CRM centralisé Yello — structure Airtable",
+  "fields": [
+    {"name": "ID Contact", "type": "autoNumber", "description": "Identifiant unique"},
+    {"name": "Nom", "type": "singleLineText", "required": true},
+    {"name": "Prénom", "type": "singleLineText"},
+    {"name": "Email", "type": "email", "required": true},
+    {"name": "Téléphone", "type": "phoneNumber"},
+    {"name": "WhatsApp", "type": "phoneNumber"},
+    {"name": "LinkedIn", "type": "url"},
+    {"name": "Organisation", "type": "singleLineText"},
+    {"name": "Poste", "type": "singleLineText"},
+    {"name": "Pays", "type": "singleLineText"},
+    {"name": "Ville", "type": "singleLineText"},
+    {"name": "Source", "type": "singleSelect", "options": ["Gmail", "Instagram", "Facebook", "WhatsApp", "LinkedIn", "Site web", "Newsletter", "Calendly", "Manuel", "Autre"]},
+    {"name": "Segment", "type": "singleSelect", "options_ref": "config/segments.json"},
+    {"name": "Statut commercial", "type": "singleSelect", "options": ["Nouveau lead", "À qualifier", "Qualifié", "Contacté", "RDV proposé", "RDV confirmé", "Proposition envoyée", "Négociation", "Converti", "Perdu", "À relancer plus tard"]},
+    {"name": "Score du lead", "type": "number", "precision": 0},
+    {"name": "Classification score", "type": "formula", "formula": "IF({Score du lead}>=81,'Priorité commerciale',IF({Score du lead}>=61,'Lead chaud',IF({Score du lead}>=31,'Lead tiède','Lead froid')))"},
+    {"name": "Dernier contact", "type": "date"},
+    {"name": "Prochaine action", "type": "singleLineText"},
+    {"name": "Commentaires", "type": "multilineText"},
+    {"name": "Sujet discussion", "type": "singleLineText"},
+    {"name": "Tags contexte", "type": "multipleSelects", "options": ["incubateur", "entreprise", "école", "investisseur", "partenaire", "média", "professionnel"]},
+    {"name": "Consentement newsletter", "type": "checkbox"},
+    {"name": "Date de création", "type": "createdTime"},
+    {"name": "Date de mise à jour", "type": "lastModifiedTime"}
+  ],
+  "views_recommended": [
+    {"name": "Tous les contacts", "type": "grid"},
+    {"name": "Leads chauds (61+)", "type": "grid", "filter": "Score du lead >= 61"},
+    {"name": "Priorité commerciale (81+)", "type": "grid", "filter": "Score du lead >= 81"},
+    {"name": "À relancer", "type": "grid", "filter": "Statut commercial = 'À relancer plus tard'"},
+    {"name": "Par segment", "type": "kanban", "group_by": "Segment"},
+    {"name": "Pipeline commercial", "type": "kanban", "group_by": "Statut commercial"}
+  ]
+}
